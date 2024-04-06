@@ -3,11 +3,20 @@ import { Button } from "../ui/button";
 import AddTodoModal from "./AddTodoModal";
 import TodoCard from "./TodoCard";
 import TodoFilter from "./TodoFilter";
+import { useGetTodosQuery } from "@/redux/api/api";
 
 //import TodoFilter from "./TodoFilter";
 
 const TodoContainer = () => {
-  const { todos } = useAppSelector((state) => state.todos);
+  //* From Local Store
+  // const { todos } = useAppSelector((state) => state.todos);
+
+  //* From server
+  const { data: todos, isLoading, isError } = useGetTodosQuery(undefined);
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div>
       <div className="flex justify-between mb-5">
@@ -20,7 +29,7 @@ const TodoContainer = () => {
             <TodoCard title={item.title} description={item.description} />
           ))} */}
 
-          {todos.map((item) => (
+          {todos?.data?.map((item) => (
             <TodoCard key={item.id} {...item} />
           ))}
 
